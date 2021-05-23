@@ -1,0 +1,15 @@
+{%extends "base.html"%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load crispy_forms_filters static %}
+{%block content%}
+
+<table class="table table-bordered">
+    <tr><th><a class="nav-item nav-link" href="{% url 'user_timesheet' %}" role="button">Draft</a></th>
+    <td>1</td></tr>
+    <tr><th><a class="nav-item nav-link" href="{% url 'user_timesheet' %}" role="button">Pending approval</a></th></tr>
+    <tr><th><a class="nav-item nav-link" href="{% url 'user_timesheet' %}" role="button">Rejected</a></th></tr>
+    <tr><th><a class="nav-item nav-link" href="{% url 'user_timesheet' %}" role="button">Approved</a></th></tr>
+    
+</table>
+{%endblock content%} 

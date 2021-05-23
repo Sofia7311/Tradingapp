@@ -1,0 +1,28 @@
+{%extends "base.html"%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load crispy_forms_filters static %}
+{%block content%}
+
+{% block extra_head %}
+  <!-- DatePicker -->
+  <link rel="stylesheet" href="{% static 'datepicker.min.css' %}">
+  <script src="{% static 'datepicker.min.js' %}"></script>
+{% endblock %}
+
+<div>
+    <p>Already registered? Please login <a href="{% url 'login_page' %}">here</a></p><br>
+    <form method="post" >
+        {% csrf_token %}
+
+        {{ form|crispy}}
+        <br>
+        <input type="submit" class="btn btn-primary" name="submit" value="Register" />
+            
+    </form>
+</div>
+
+
+
+{%endblock content%}    
+

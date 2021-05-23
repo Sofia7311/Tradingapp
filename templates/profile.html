@@ -1,0 +1,37 @@
+{%extends "base.html"%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    
+    <form method="post" >
+        {% csrf_token %}
+        
+             <h3>Home Address:</h3>
+             {{ form.home_address|as_crispy_field }}
+             <strong>{{ form.home_address.errors }}</strong>
+             <br>
+             {{ form.home_address_move_date|as_crispy_field }}
+             <br>
+            <h3>Emergency Contact details:</h3>
+             {{ form.emergency_contact_name|as_crispy_field }}
+             <strong>{{ form.emergency_contact_name.errors }}</strong>
+             <br>
+             {{ form.emergency_contact_number|as_crispy_field }}
+             <strong>{{ form.emergency_contact_number.errors }}</strong>
+             <br>
+             {{ form.emergency_contact_relationship|as_crispy_field }}
+             <strong>{{ form.emergency_contact_relationship.errors }}</strong>
+             <br>
+             {{ form.emergency_contact_address|as_crispy_field }}
+             <strong>{{ form.emergency_contact_address.errors }}</strong>
+             <br>
+             <h3>Bank details:</h3>
+             {{ form.bank_account_number|as_crispy_field }}
+             <strong>{{ form.bank_account_number.errors }}</strong>
+             <br>
+             {{ form.bank_sort_code|as_crispy_field }}
+             <strong>{{ form.bank_sort_code.errors }}</strong>
+             <br>
+            <input type="submit" class="btn btn-primary" name="Continue" value="Continue" />
+        </form> 
+{%endblock content%}

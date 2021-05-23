@@ -1,0 +1,29 @@
+{%extends "base.html"%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    
+    <form method="post" >
+        {% csrf_token %}
+        <h4>Job Information:</h4>
+        {{ form.national_insurance_number|as_crispy_field }}
+             <strong>{{ form.national_insurance_number.errors }}</strong>
+             <br>
+             
+             {{ form.department_name|as_crispy_field }}
+             <strong>{{ form.department_name.errors }}</strong>
+             <br>
+             {{ form.job_title|as_crispy_field }}
+             <strong>{{ form.job_title.erros }}</strong>
+             <br>
+             {{ form.date_of_joining|as_crispy_field }}
+             <strong>{{ form.date_of_joining.errors }}</strong>
+             <br>
+             {{ form.salary_initial|as_crispy_field }}
+             <strong>{{ form.salary_initial.errors }}</strong>
+             <br>
+             {{ form.nationality|as_crispy_field }}
+            <br>
+            <input type="submit" class="btn btn-primary" name="Continue" value="Continue" />
+        </form> 
+{%endblock content%}

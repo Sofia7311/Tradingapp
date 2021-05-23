@@ -1,0 +1,19 @@
+
+{%extends "base.html"%}
+{% load static %}
+{% block content %}
+<div id="header-wrapper">
+	<div id="header" class="container">
+
+        {% if user.is_authenticated %}
+		    <div id="logo">
+                <form action="search" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="search">
+                    <input type="submit" value="search"><br>
+                </form>
+            </div>
+        {% endif %}
+	</div>
+</div>
+{%endblock content%}

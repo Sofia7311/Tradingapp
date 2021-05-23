@@ -1,0 +1,34 @@
+{%extends "base.html"%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load crispy_forms_filters static %}
+{%block content%}
+
+<table class="table table-bordered">
+    <tr>
+        <th>User ID :</th>
+        <th>Start date:</th>
+        <th>Status</th>
+    </tr>
+    <tr>
+            <td>{{ request.user }}</td> 
+            {% if status == 'Submitted' or status == 'APPRVD' %}
+            <a class="nav-item nav-link" href="{% url 'add_timesheet' %}" role="button">{{start_date}}</a>
+                <td>{{start_date}}</td>
+            {% else %}
+            <td>
+                <a class="nav-item nav-link" href="{% url 'add_timesheet' %}" role="button">{{start_date}}</a>
+            </td>
+            {%  endif %}
+            <td>{{status}}</td>
+    </tr>   
+</table>   
+<table class="table table-bordered">
+    <tr><th><a class="nav-item nav-link" href="{% url 'user_timesheet' %}" role="button">Draft</a></th>
+    <td>1</td></tr>
+    <tr><th><a class="nav-item nav-link" href="{% url 'user_timesheet' %}" role="button">Pending approval</a></th></tr>
+    <tr><th><a class="nav-item nav-link" href="{% url 'user_timesheet' %}" role="button">Rejected</a></th></tr>
+    <tr><th><a class="nav-item nav-link" href="{% url 'user_timesheet' %}" role="button">Approved</a></th></tr>
+    
+</table>    
+{%endblock content%} 
