@@ -2,7 +2,8 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm,UserCreationForm, User
 #from loginpgm.forms import 
-from mainapp.forms import CustomUserCreationForm, CustomUserChangeForm, HomeAddressChangeForm, VisaholderForm, BritishPassportform, CustomUserJobForm
+from mainapp.forms import CustomUserCreationForm, CustomUserChangeForm, HomeAddressChangeForm, ReadonlyChangeForm, VisaholderForm, BritishPassportform, CustomUserJobForm
+from mainapp.forms import ReadonlyChangeForm
 from mainapp.models import CustomUser
 from loginpgm.models import AddressHistory
 #from verify_email.email_handler import send_verification_email
@@ -56,9 +57,8 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data.get('email')
-            messages.success(request, f'Account created for {email}.A verification link has been sent to your email address. Please check and validate your email')
             send_verification_email(request, form)
-    
+            messages.success(request, f'Account created for {email}.A verification link has been sent to your email address. Please check and validate your email')
         return render(request, 'register.html', {'form': form})
     else:
         form = CustomUserCreationForm()
@@ -70,7 +70,7 @@ def profile(request):
     if request.method == 'POST':
         form    =   CustomUserChangeForm(request.POST, instance=request.user)
     
-        if 'Continue' in request.POST:       
+        if 'Save' in request.POST:       
             if form.is_valid:
                 form.save()
 
@@ -89,6 +89,25 @@ def profile(request):
     else:
         form    =   CustomUserChangeForm(instance=request.user)
         return render(request, 'profile.html', {'form': form})
+
+@login_required
+def profile_readonly(request):
+     
+    if request.method == 'POST':
+        form    =   ReadonlyChangeForm(request.POST, instance=request.user)
+        print(request.POST)
+
+        if 'Edit bank' in request.POST:
+            return redirect('profile')
+        elif 'Edit Address' in request.POST:       
+            return redirect('home_address_update')
+        elif 'Edit Job' in request.POST:    
+            return redirect('user_job_details')
+        elif 'Edit Nationality' in request.POST:   
+            return redirect('nationality')
+    else:
+        form    =   ReadonlyChangeForm(instance=request.user)
+        return render(request, 'profile_readonly.html', {'form': form})
 
 @login_required
 def user_job(request):
@@ -143,7 +162,7 @@ def home_address_update(request):
             address_instance.addresshistory = request.user
             address_instance.save()
             messages.success(request, f'Address update successful.')
-            return redirect('profile')
+            return redirect('profile_readonly')
     else:
         form    =   HomeAddressChangeForm()
         current_address = old_address_instance.home_address
@@ -159,9 +178,9 @@ def nationality(request):
                 form.save()
                 messages.success(request, f'Your profile details updated Successfully!')
                 return redirect('Index') 
-            '''else:
+            else:
                 #form = VisaholderForm(instance=request.user)
-                return render(request, 'visaholder_form.html', {'form': form})'''
+                return render(request, 'visaholder_form.html', {'form': form})
 
         if 'Passport' in request.POST: 
             form = BritishPassportform(request.POST, instance=request.user)
@@ -170,9 +189,9 @@ def nationality(request):
                 form.save()
                 messages.success(request, f'Your profile details updated Successfully!')
                 return redirect('Index') 
-            '''else:
+            else:
                 #form = BritishPassportform(instance=request.user)
-                return render(request, 'British_passport_form.html', {'form': form})   '''    
+                return render(request, 'British_passport_form.html', {'form': form})       
     else:
         try:
             uk_citizen = CustomUser.objects.get(nationality='GB')

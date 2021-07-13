@@ -332,8 +332,8 @@ class CustomUser(AbstractUser):
     home_address_move_date          =   models.DateField(verbose_name='Address Move Date', null=True)
     nationality                     =   models.CharField(max_length = 20, choices=COUNTRIES)
     residence_permit_number         =   models.CharField(max_length = 50)
-    valid_from_date                 =   models.DateField(verbose_name='Valid from date')
-    valid_to_date                   =   models.DateField(verbose_name='Valid to date')
+    valid_from_date                 =   models.DateField(verbose_name='Valid from date', null=True)
+    valid_to_date                   =   models.DateField(verbose_name='Valid to date', null=True)
     visa_type                       =   models.CharField(max_length = 100, choices=UK_VISA_TYPES)
 
 
@@ -350,9 +350,9 @@ class TimeSheet(models.Model):
 
     weekdates   =   models.CharField(max_length = 40, verbose_name='Start Date')
     project_id  =   models.CharField(max_length = 50)
-    work_hours  =   models.DecimalField(max_digits=5, decimal_places=2)
-    total_hours =   models.DecimalField(max_digits=5, decimal_places=2)
-    status      =   models.CharField(max_length = 20)
+    work_hours  =   models.DecimalField(max_digits=5, decimal_places=2, null=True)
+    total_hours =   models.DecimalField(max_digits=5, decimal_places=2, null=True)
+    status      =   models.CharField(max_length = 20, null=True)
     userid      =   models.ForeignKey(CustomUser, on_delete = models.CASCADE, blank=True)
 
     def __str__(self):
@@ -361,10 +361,10 @@ class TimeSheet(models.Model):
 
 class TimeSheetWeek(models.Model):
     STATUS_CHOICES  =   [
-        ('SVD', 'Saved'),
-        ('PA', 'Pending Approval'),
-        ('SUB', 'Submitted'),
-        ('APPRVD', 'Approved'),
+        ('SAVED', 'Saved'),
+        ('PENDING APRROVAL', 'Pending Approval'),
+        ('SUBMITTED', 'Submitted'),
+        ('APPROVED', 'Approved'),
         ('REJECTED', 'Rejected')
         ] 
     weekdates   =   models.CharField(max_length = 40, verbose_name='Start Date')

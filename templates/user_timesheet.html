@@ -4,6 +4,8 @@
 {% load crispy_forms_filters static %}
 {%block content%}
 
+<form method="post" >
+    {% csrf_token %}
 <table class="table table-bordered">
     <tr>
         <th>User ID :</th>
@@ -23,12 +25,17 @@
             <td>{{status}}</td>
     </tr>   
 </table>   
+
 <table class="table table-bordered">
-    <tr><th><a class="nav-item nav-link" href="{% url 'user_timesheet' %}" role="button">Draft</a></th>
-    <td>1</td></tr>
-    <tr><th><a class="nav-item nav-link" href="{% url 'user_timesheet' %}" role="button">Pending approval</a></th></tr>
-    <tr><th><a class="nav-item nav-link" href="{% url 'user_timesheet' %}" role="button">Rejected</a></th></tr>
-    <tr><th><a class="nav-item nav-link" href="{% url 'user_timesheet' %}" role="button">Approved</a></th></tr>
-    
+    <tr><th><input type="submit" class="btn btn-link" name="Save" value="Draft"></th>
+        <td>{{ save_count }}</td></tr>
+    <tr><th><input type="submit" class="btn btn-link" name="Submit" value="Submit"></th>
+        <td>{{ submit_count }}</td></tr></tr>
+    <tr><th><input type="submit" class="btn btn-link" name="Reject" value="Reject"></th>
+        <td>{{ reject_count }}</td></tr></tr>
+    <tr><th><input type="submit" class="btn btn-link" name="Approve" value="Approve"></th>
+        <td>{{ approve_count }}</td></tr></tr>
 </table>    
+
+</form>
 {%endblock content%} 

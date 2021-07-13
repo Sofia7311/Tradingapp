@@ -76,7 +76,7 @@ class TimeSheetWeekAdmin(admin.ModelAdmin):
         verbose_name_plural = 'Week Timesheet'
 
 
-    form = TimeSheetWeekForm()
+    #form = TimeSheetWeekForm()
     list_display = ('user_id', 'weekdates', 'status', 'total_hours')
     #list_select_related  =  ('addresshistory',)
     ordering = ('user_id',)

@@ -9,6 +9,7 @@ urlpatterns = [
     path("register",views.register,name="register"),
     #path("logout",views.logout_view,name="mainlogout"),
     path("profile",views.profile,name="profile"),
+    path("profile_readonly", views.profile_readonly,  name="profile_readonly"),
     path("user_job_details",views.user_job,name="user_job_details"),
     path("nationality",views.nationality,name="nationality"),
     path("home_address_update",views.home_address_update,name="home_address_update"),

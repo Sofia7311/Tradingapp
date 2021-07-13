@@ -4,12 +4,43 @@
 {% load crispy_forms_filters static %}
 {%block content%}
 
-<table class="table table-bordered">
-    <tr><th><a class="nav-item nav-link" href="{% url 'user_timesheet' %}" role="button">Draft</a></th>
-    <td>1</td></tr>
-    <tr><th><a class="nav-item nav-link" href="{% url 'user_timesheet' %}" role="button">Pending approval</a></th></tr>
-    <tr><th><a class="nav-item nav-link" href="{% url 'user_timesheet' %}" role="button">Rejected</a></th></tr>
-    <tr><th><a class="nav-item nav-link" href="{% url 'user_timesheet' %}" role="button">Approved</a></th></tr>
-    
-</table>
+<form method="post" >
+    {% csrf_token %}
+    {{ formset.management_form }}
+        {% if status == 'SAVED' or status == 'REJECTED' %}
+            <table class="table table-bordered">
+                <tr>
+                    <th>Start_date:</th>
+                    <th>Status:</th>
+                    <th>User id</th>
+                    <th> </th>
+                </tr>
+                {% for form in  formset %}
+                <tr>
+                    <td>{{form.weekdates}}</td>
+                    <td>{{form.status}}</td>
+                    <td>{{form.user_id}}</td> 
+                    <td><a class="nav-item nav-link" href="{% url 'add_timesheet' %}" >EDIT</a></td>
+                </tr>
+                {% endfor %}
+            </table>    
+        {% else %}
+            <table class="table table-bordered">
+                <tr>
+                    <th>Start_date:</th>
+                    <th>Status:</th>
+                    <th>Total hours</th>
+                    <th>User id</th>
+                </tr>
+                {% for form in  formset %}
+                <tr>
+                    <td>{{form.weekdates}}</td>
+                    <td>{{form.status}}</td>
+                    <td>{{form.total_hours}}</td>
+                    <td>{{form.user_id}}</td> 
+                </tr>
+                {% endfor %}
+            </table>  
+        {% endif %}  
+    </form>
 {%endblock content%} 

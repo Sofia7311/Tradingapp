@@ -199,18 +199,11 @@ class _VerifyEmail:
         return absolute_link
 
     def send_verification_link(self, request, form):
+        print('inside verification link function')
         inactive_user = form.save(commit=False)
-        #home_address = request.POST['home_address']
-        #home_address_move_date = request.POST['home_address_move_date']
-        #addresshistory = inactive_user
         inactive_user.is_active = False
         inactive_user.save()
-        #address_instance = AddressHistory(home_address=home_address, home_address_move_date=home_address_move_date,
-         #                                   addresshistory=addresshistory)
-        #address_instance.save()
-        
-        
-        
+
         try:
             useremail = form.cleaned_data.get(self.settings.get('email_field_name'))
             if not useremail:
@@ -219,16 +212,18 @@ class _VerifyEmail:
                     ' "EMAIL_FIELD_NAME" with the name of current field in settings.py if you want to use current name '
                     'as email field.'
                 )
-
+            print('inside try1')
             verification_url = self.__make_verification_url(request, inactive_user, useremail)
             subject = self.settings.get('subject')
             msg = render_to_string(self.settings.get('html_message_template', raise_exception=True),
                                    {"link": verification_url})
-
+            print(verification_url)
             try:
                 send_mail(subject, strip_tags(msg), from_email=self.settings.get('from_alias'),
                           recipient_list=[useremail], html_message=msg)
+                print('inside try2')
                 return inactive_user
+                
             except (BadHeaderError, SMTPException):
                 inactive_user.delete()
                 return False

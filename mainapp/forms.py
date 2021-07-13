@@ -4,7 +4,7 @@ from mainapp.models import CustomUser, TimeSheet, CountryField, TimeSheetWeek
 from loginpgm.models import AddressHistory
 from django.utils import timezone
 #from mainapp.countries import CountryField
-from django_countries.fields import CountryField
+#from django_countries.fields import CountryField
 from django.utils.translation import ugettext as _
 
 
@@ -20,7 +20,7 @@ class CustomUserCreationForm(UserCreationForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
     date_of_birth = forms.DateField(widget=DateInput)
-    #home_address_move_date = forms.DateField(widget=DateInput)
+    
     class Meta:
         model = CustomUser
         fields = ('email', 'password1', 'password2','first_name', 'middle_name', 'last_name', 'date_of_birth','contact_number')
@@ -281,6 +281,32 @@ class CustomUserChangeForm(forms.ModelForm):
         'emergency_contact_address', 'emergency_contact_relationship', 'bank_account_number', 'bank_sort_code')
 
 
+class ReadonlyChangeForm(forms.ModelForm):
+    home_address                    =   forms.CharField(disabled=True)
+    home_address_move_date          =   forms.CharField(disabled=True)
+    emergency_contact_name          =   forms.CharField(disabled=True)
+    emergency_contact_number        =   forms.CharField(disabled=True)
+    emergency_contact_address       =   forms.CharField(disabled=True)
+    emergency_contact_relationship  =   forms.CharField(disabled=True)
+    bank_account_number             =   forms.CharField(disabled=True)
+    bank_sort_code                  =   forms.CharField(disabled=True)
+    job_title                       =   forms.CharField(disabled=True)
+    department_name                 =   forms.CharField(disabled=True)
+    salary_initial                  =   forms.CharField(disabled=True)
+    date_of_joining                 =   forms.CharField(disabled=True)
+    national_insurance_number       =   forms.CharField(disabled=True)
+    residence_permit_number         =   forms.CharField(disabled=True)
+    visa_type                       =   forms.CharField(disabled=True)
+    valid_from_date                 =   forms.CharField(disabled=True)
+    valid_to_date                   =   forms.CharField(disabled=True)
+    
+    class Meta:
+        model = CustomUser
+        fields = ('home_address', 'home_address_move_date', 'emergency_contact_name', 'emergency_contact_number', 
+        'emergency_contact_address', 'emergency_contact_relationship', 'bank_account_number', 'bank_sort_code',
+        'job_title', 'department_name', 'salary_initial', 'date_of_joining', 'national_insurance_number', 'nationality',
+        'residence_permit_number', 'visa_type',  'valid_from_date', 'valid_to_date')
+
 class CustomUserJobForm(forms.ModelForm):
 #date_of_birth = forms.DateField(widget=DateInput)
     home_address_move_date = forms.DateField(widget=DateInput)
@@ -311,12 +337,14 @@ class HomeAddressChangeForm(forms.ModelForm):
     
 
 class TimeSheetForm(forms.ModelForm):
-    #weekdates   =   forms.DateField(disabled=True)
+    work_hours  =   forms.DecimalField(required=False)
+    status      =   forms.CharField(required=False)
+    total_hours =   forms.DecimalField(required=False)
     #project_id  =   forms.CharField(disabled=True)
     
     class Meta:
         model = TimeSheet
-        fields = ('project_id','weekdates', 'work_hours', 'status', 'total_hours', 'userid')   
+        fields = ('project_id','weekdates', 'work_hours', 'userid')   
 
 
 class TimeSheetWeekForm(forms.ModelForm):
@@ -324,6 +352,17 @@ class TimeSheetWeekForm(forms.ModelForm):
     #project_id  =   forms.CharField(disabled=True)
     
     class Meta:
+        model = TimeSheetWeek
+        fields = ('weekdates', 'status', 'total_hours', 'user_id') 
+
+class TimeSheetStatusForm(forms.ModelForm):
+    weekdates   =   forms.DateField(disabled=True)
+    status      =   forms.CharField(disabled=True)
+    total_hours =   forms.DecimalField(disabled=True)
+    user_id     =   forms.CharField(disabled=True)
+    
+    class Meta:
+        
         model = TimeSheetWeek
         fields = ('weekdates', 'status', 'total_hours', 'user_id') 
 

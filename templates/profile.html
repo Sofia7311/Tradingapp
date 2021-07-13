@@ -5,13 +5,13 @@
     
     <form method="post" >
         {% csrf_token %}
-        
-             <h3>Home Address:</h3>
-             {{ form.home_address|as_crispy_field }}
-             <strong>{{ form.home_address.errors }}</strong>
-             <br>
-             {{ form.home_address_move_date|as_crispy_field }}
-             <br>
+        <h3>Home Address:</h2>
+        {{ form.home_address|as_crispy_field }}
+        <strong>{{ form.home_address.errors }}</strong>
+        <br>
+        {{ form.home_address_move_date|as_crispy_field}}
+        <br>
+
             <h3>Emergency Contact details:</h3>
              {{ form.emergency_contact_name|as_crispy_field }}
              <strong>{{ form.emergency_contact_name.errors }}</strong>
@@ -32,6 +32,6 @@
              {{ form.bank_sort_code|as_crispy_field }}
              <strong>{{ form.bank_sort_code.errors }}</strong>
              <br>
-            <input type="submit" class="btn btn-primary" name="Continue" value="Continue" />
+            <input type="submit" class="btn btn-primary" name="Save" value="Save" />
         </form> 
 {%endblock content%}
