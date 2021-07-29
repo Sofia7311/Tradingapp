@@ -15,12 +15,15 @@
                     <th>User id</th>
                     <th> </th>
                 </tr>
-                {% for form in  formset %}
+                
+                {% for each_timesheet in timesheet %}
                 <tr>
-                    <td>{{form.weekdates}}</td>
-                    <td>{{form.status}}</td>
-                    <td>{{form.user_id}}</td> 
-                    <td><a class="nav-item nav-link" href="{% url 'add_timesheet' %}" >EDIT</a></td>
+                    <td>{{ each_timesheet.weekdates}}</td>                        
+                    <td>{{ each_timesheet.status}}</td>
+                    <td>{{ each_timesheet.user_id}}</td> 
+                    <td><a class="nav-item nav-link" href="{% url 'update_timesheet' each_timesheet.id %}" >EDIT</a></td>
+
+                
                 </tr>
                 {% endfor %}
             </table>    
@@ -32,12 +35,13 @@
                     <th>Total hours</th>
                     <th>User id</th>
                 </tr>
-                {% for form in  formset %}
+                
+                {% for each_timesheet in timesheet %}
                 <tr>
-                    <td>{{form.weekdates}}</td>
-                    <td>{{form.status}}</td>
-                    <td>{{form.total_hours}}</td>
-                    <td>{{form.user_id}}</td> 
+                    <td>{{each_timesheet.weekdates}}</td>
+                    <td>{{each_timesheet.status}}</td>
+                    <td>{{each_timesheet.total_hours}}</td>
+                    <td>{{each_timesheet.user_id}}</td> 
                 </tr>
                 {% endfor %}
             </table>  

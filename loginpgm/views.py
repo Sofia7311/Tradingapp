@@ -137,13 +137,16 @@ def user_job(request):
 
 @login_required
 def home_address_update(request):
-    old_address_instance = AddressHistory.objects.get(
+    try:
+        old_address_instance = AddressHistory.objects.get(
             addresshistory=request.user, 
             home_address_move_out_date__isnull=True)
+    except AddressHistory.DoesNotExist:
+        old_address_instance  =  None
 
     if request.method == 'POST':
         form    =   HomeAddressChangeForm(request.POST)
-        print(form)
+        
         if form.is_valid:
             if old_address_instance:
                 #update existing address on AddressHistory DB
@@ -165,7 +168,10 @@ def home_address_update(request):
             return redirect('profile_readonly')
     else:
         form    =   HomeAddressChangeForm()
-        current_address = old_address_instance.home_address
+        if old_address_instance:
+            current_address = old_address_instance.home_address
+        else:
+            current_address = ' '
         return render(request, 'home_address_update.html', {'form': form, 'current_address': current_address} )
 
 @login_required

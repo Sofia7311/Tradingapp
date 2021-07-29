@@ -19,7 +19,7 @@ class CustomUserAdmin(UserAdmin):
     list_display = ('email', 'first_name', 'last_name', 'job_title')
     #list_filter = ('is_admin',)
     fieldsets = (
-        ('Personal info', {'fields': ('first_name','middle_name','last_name', 'date_of_birth', 'home_address',
+        ('Personal info', {'fields': ('home_address',
         'home_address_move_date','contact_number')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
         ('Employment details', {'fields': ('job_title', 'department_name', 'salary_initial', 
@@ -35,7 +35,7 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2'),
+            'fields': ('email', 'password1', 'password2', 'first_name','middle_name','last_name', 'date_of_birth'),
         }),
     )
     #search_fields = ('email',)
@@ -65,7 +65,7 @@ class TimeSheetAdmin(admin.ModelAdmin):
 
 
     form = TimeSheetForm
-    list_display = ('project_id', 'userid', 'weekdates')
+    list_display = ('id', 'project_id', 'userid', 'weekdates', 'timesheet_week_id', 'status')
     #list_select_related  =  ('addresshistory',)
     ordering = ('userid',)
 
@@ -77,7 +77,7 @@ class TimeSheetWeekAdmin(admin.ModelAdmin):
 
 
     #form = TimeSheetWeekForm()
-    list_display = ('user_id', 'weekdates', 'status', 'total_hours')
+    list_display = ('user_id', 'weekdates', 'status', 'total_hours','week_date_format')
     #list_select_related  =  ('addresshistory',)
     ordering = ('user_id',)
 

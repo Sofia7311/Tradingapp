@@ -310,7 +310,7 @@ class ReadonlyChangeForm(forms.ModelForm):
 class CustomUserJobForm(forms.ModelForm):
 #date_of_birth = forms.DateField(widget=DateInput)
     home_address_move_date = forms.DateField(widget=DateInput)
-    #date_of_joining = forms.DateField(widget=DateInput)
+    date_of_joining = forms.DateField(widget=DateInput)
     #nationality = forms.ChoiceField(choices=COUNTRIES)
     #nationality = CountryField(blank_label='(select country)')
 
@@ -338,13 +338,13 @@ class HomeAddressChangeForm(forms.ModelForm):
 
 class TimeSheetForm(forms.ModelForm):
     work_hours  =   forms.DecimalField(required=False)
-    status      =   forms.CharField(required=False)
-    total_hours =   forms.DecimalField(required=False)
+    #status      =   forms.CharField(required=False)
+    #total_hours =   forms.DecimalField(required=False)
     #project_id  =   forms.CharField(disabled=True)
     
     class Meta:
         model = TimeSheet
-        fields = ('project_id','weekdates', 'work_hours', 'userid')   
+        fields = ('project_id','weekdates', 'work_hours', 'userid', 'status',  'timesheet_week_id')   
 
 
 class TimeSheetWeekForm(forms.ModelForm):

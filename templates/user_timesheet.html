@@ -14,13 +14,11 @@
     </tr>
     <tr>
             <td>{{ request.user }}</td> 
-            {% if status == 'Submitted' or status == 'APPRVD' %}
-            <a class="nav-item nav-link" href="{% url 'add_timesheet' %}" role="button">{{start_date}}</a>
-                <td>{{start_date}}</td>
+            {% if status == 'SAVED' or status == 'REJECTED' %}
+                <td><a class="nav-item nav-link" href="{% url 'add_timesheet' %}" role="button">{{start_date}}</a></td>
+                 
             {% else %}
-            <td>
-                <a class="nav-item nav-link" href="{% url 'add_timesheet' %}" role="button">{{start_date}}</a>
-            </td>
+                <td>{{start_date}}</td>
             {%  endif %}
             <td>{{status}}</td>
     </tr>   

@@ -162,7 +162,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
@@ -172,7 +172,7 @@ EMAIL_FIELD_NAME = 'email'
 LOGIN_URL = 'login_page'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-LOGIN_REDIRECT_URL = 'profile'
+LOGIN_REDIRECT_URL = 'profile_readonly'
 SESSION_COOKIE_AGE = 1000
 #LOGOUT_REDIRECT_URL =   'logout_page'
 #SESSION_EXPIRE_AT_BROWSER_CLOSE = True

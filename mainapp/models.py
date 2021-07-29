@@ -297,16 +297,29 @@ class CustomUser(AbstractUser):
         ('T7', 'Tier 2 (Minister of Religion) visa'),
         ('T8', 'Tier 2 (Sportsperson) visa'),
         ('T9', 'Tier 2 (Intra-Company Transfer) visa'),
-        ('T10', 'Tier 5 (International Agreement) visa'),
-        ('T11', 'Turkish Businessperson or Turkish Worker visa'),
-        ('T12', 'Work Permit'),
-        ('T13', 'Sole Representative of an Overseas Business visa'),
-        ('T14', 'Representative of an Overseas Newspaper, News Agency or Broadcaster visa'),
-        ('T15', 'Domestic Worker visa'),
-        ('T16', 'Skilled Worker visa'),
-        ('T17', 'Global Talent visa'),
-        ('T18', 'Innovator visa'),
-        ('T19', 'Family visa'),
+        ('T10', 'Tier 4 (Child) Student Visa'),
+        ('T11', 'Tier 4 (General) Student Visa'),
+        ('T12', 'Short Term Study Visa'),
+        ('T13', 'Tier 5 (Youth Mobility Scheme) Visa'),
+        ('T14', 'Tier 5 (Temporary Worker) Visa'),
+        ('T15', 'Turkish Businessperson or Turkish Worker visa'),
+        ('T16', 'Work Permit'),
+        ('T17', 'Sole Representative of an Overseas Business visa'),
+        ('T18', 'Representative of an Overseas Newspaper, News Agency or Broadcaster visa'),
+        ('T19', 'Domestic Worker visa'),
+        ('T20', 'Skilled Worker visa'),
+        ('T21', 'Global Talent visa'),
+        ('T22', 'Innovator visa'),
+        ('T23', 'Marriage Visitor Visa'),
+        ('T24', 'Parent of a Tier 4 (Child) Student Visa'),
+        ('T25', 'Permitted Paid Engagement Visa'),
+        ('T26', 'Short-term Study Visa'),
+        ('T27', 'UK Visitor Visa'),
+        ('T28', 'Visa for a Chinese Tour Group'),
+        ('T29', 'UK Spouse Visa'),
+        ('T30', 'UK Parent Visa'),
+        ('T31', 'UK Child Visa'),
+
         ] 
 
     email                       =   models.EmailField(primary_key=True, verbose_name='Email address', max_length=255, unique=True, error_messages={'unique': 'Email address already exists.'})
@@ -325,7 +338,7 @@ class CustomUser(AbstractUser):
     emergency_contact_number    =   models.CharField(max_length = 20, verbose_name = 'Contact number')
     emergency_contact_address   =   models.CharField(max_length = 200, verbose_name = 'Address')
     date_joined                 =   models.DateTimeField(default=timezone.now, verbose_name='Logged in date')
-    date_of_joining             =   models.DateField(default=timezone.now, verbose_name='Date of joining')
+    date_of_joining             =   models.DateField(verbose_name='Date of joining', null=True)
     first_name                  =   models.CharField(max_length=150)
     last_name                   =   models.CharField(max_length=150)
     emergency_contact_relationship  =   models.CharField(max_length=150)
@@ -346,19 +359,6 @@ class CustomUser(AbstractUser):
         return self.email
 
 
-class TimeSheet(models.Model):
-
-    weekdates   =   models.CharField(max_length = 40, verbose_name='Start Date')
-    project_id  =   models.CharField(max_length = 50)
-    work_hours  =   models.DecimalField(max_digits=5, decimal_places=2, null=True)
-    total_hours =   models.DecimalField(max_digits=5, decimal_places=2, null=True)
-    status      =   models.CharField(max_length = 20, null=True)
-    userid      =   models.ForeignKey(CustomUser, on_delete = models.CASCADE, blank=True)
-
-    def __str__(self):
-        return self.project_id
-
-
 class TimeSheetWeek(models.Model):
     STATUS_CHOICES  =   [
         ('SAVED', 'Saved'),
@@ -367,11 +367,30 @@ class TimeSheetWeek(models.Model):
         ('APPROVED', 'Approved'),
         ('REJECTED', 'Rejected')
         ] 
+    #id =   models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     weekdates   =   models.CharField(max_length = 40, verbose_name='Start Date')
+    week_date_format  =  models.DateField()
+    #timesheetweek_id  =   models.CharField(max_length = 40)
     total_hours =   models.DecimalField(max_digits=5, decimal_places=2)
     status      =   models.CharField(max_length = 20, choices=STATUS_CHOICES)
     user_id      =   models.ForeignKey(CustomUser, on_delete = models.CASCADE, blank=True)
 
-    def __str__(self):
-        return self.weekdates
+    def __int__(self):
+        return self.id
+        
+
+class TimeSheet(models.Model):
+
+    #weekdates   =   models.ForeignKey(TimeSheetWeek, on_delete = models.CASCADE, blank=True)
+    weekdates   =   models.CharField(max_length = 40, verbose_name='Start Date')
+    project_id  =   models.CharField(max_length = 50)
+    work_hours  =   models.DecimalField(max_digits=5, decimal_places=2, null=True)
+    total_hours =   models.DecimalField(max_digits=5, decimal_places=2, null=True)
+    status      =   models.CharField(max_length = 20, null=True)
+    timesheet_week_id =  models.ForeignKey(TimeSheetWeek, on_delete = models.CASCADE, blank=True)
+    userid      =   models.ForeignKey(CustomUser, on_delete = models.CASCADE, blank=True)
+
+    def __int__(self):
+        return self.id
+
 
