@@ -85,7 +85,8 @@ def profile(request):
                     address_instance.home_address =  request.POST['home_address']
                     address_instance.home_address_move_date = request.POST['home_address_move_date']
                     address_instance.save() 
-        return redirect('user_job_details')
+            messages.success(request, f'Emergency contact details-update successful!!.')
+        return redirect('profile_readonly')
     else:
         form    =   CustomUserChangeForm(instance=request.user)
         return render(request, 'profile.html', {'form': form})
@@ -107,7 +108,7 @@ def profile_readonly(request):
             return redirect('nationality')
     else:
         form    =   ReadonlyChangeForm(instance=request.user)
-        return render(request, 'profile_readonly.html', {'form': form})
+    return render(request, 'profile_readonly.html', {'form': form})
 
 @login_required
 def user_job(request):
@@ -127,9 +128,9 @@ def user_job(request):
                     nationality = request.POST['nationality']
                     )
 
-               # messages.success(request, f'Saved. Please click "continue"')
+                messages.success(request, f'Job details - update successful!!')
                # return render(request, 'user_job_details.html', {'form': form})
-                return redirect('nationality')
+                return redirect('profile_readonly')
     else:
         form    =   CustomUserJobForm(instance=request.user)
         return render(request, 'user_job_details.html', {'form': form})
@@ -178,23 +179,23 @@ def home_address_update(request):
 def nationality(request):
     if request.method == 'POST':
         if 'Visa' in request.POST: 
-            form = VisaholderForm(request.POST, instance=request.user)
-
+            form = VisaholderForm(request.POST, request.FILES, instance=request.user)
+            print(form)
             if form.is_valid:
                 form.save()
                 messages.success(request, f'Your profile details updated Successfully!')
-                return redirect('Index') 
+                return redirect('profile_readonly') 
             else:
                 #form = VisaholderForm(instance=request.user)
                 return render(request, 'visaholder_form.html', {'form': form})
 
         if 'Passport' in request.POST: 
-            form = BritishPassportform(request.POST, instance=request.user)
+            form = BritishPassportform(request.POST, request.FILES, instance=request.user)
 
             if form.is_valid:
                 form.save()
                 messages.success(request, f'Your profile details updated Successfully!')
-                return redirect('Index') 
+                return redirect('profile_readonly') 
             else:
                 #form = BritishPassportform(instance=request.user)
                 return render(request, 'British_passport_form.html', {'form': form})       

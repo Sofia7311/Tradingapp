@@ -14,7 +14,7 @@
     </tr>
     <tr>
             <td>{{ request.user }}</td> 
-            {% if status == 'SAVED' or status == 'REJECTED' %}
+            {% if status == 'SAVED' or status == 'REJECTED' or status == ' ' %}
                 <td><a class="nav-item nav-link" href="{% url 'add_timesheet' %}" role="button">{{start_date}}</a></td>
                  
             {% else %}

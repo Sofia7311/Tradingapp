@@ -1,15 +1,18 @@
-from mainapp.forms import TimeSheetForm, TimeSheetWeekForm,  TimeSheetStatusForm
+from django.http import request
+from mainapp.forms import ExpenseFormSet, Expensesform, TimeSheetForm, TimeSheetWeekForm,  TimeSheetStatusForm
 import xml.etree.ElementTree as ET
 #from bs4 import BeautifulSoup as soup
 #import requests
 #from selenium import webdriver
 #from mainapp.forms import TimeSheetForm
-from .models import  TimeSheet, CustomUser, TimeSheetWeek
+from .models import  Expenses, TimeSheet, CustomUser, TimeSheetWeek
 from django.shortcuts import render, redirect
 from django.forms import inlineformset_factory, formset_factory, modelformset_factory
 from django.contrib.auth.decorators import login_required
-import datetime
+import datetime, decimal
 from django.contrib import messages
+from django.views.generic import ListView, TemplateView, CreateView
+from django.urls import reverse_lazy
 
 
 # Create your views here.
@@ -74,7 +77,7 @@ def timesheet(request):
         return render(request, 'timesheet_status.html', {'status' :current_status, 'timesheet': initial_data})
     else:
         week_day=datetime.datetime.now().isocalendar()[2]
-        start_date=datetime.datetime.now() - datetime.timedelta(days=week_day+6)
+        start_date=datetime.datetime.now() - datetime.timedelta(days=week_day-1)
         date_match = (start_date + datetime.timedelta(days=0)).date().strftime("%a") + ', ' + str((start_date + datetime.timedelta(days=0)).date())
         print('inside timesheet')
         print(date_match)
@@ -86,7 +89,7 @@ def timesheet(request):
                 timesheet_instance  = TimeSheet.objects.get(userid=request.user, weekdates=date_match)
                 status =  timesheet_instance.status
             except TimeSheet.DoesNotExist:
-                status =  'Not Submitted'
+                status =  ' '
 
     
         return render(request, 'user_timesheet.html',  {'start_date': start_date, 'status':status, 'save_count': save_count,
@@ -98,7 +101,7 @@ def add_timesheet(request):
     TimeSheetFormSet = inlineformset_factory(TimeSheetWeek, TimeSheet, fields=('project_id', 'work_hours', 'weekdates'), extra=7, max_num=7)
     
     week_day=datetime.datetime.now().isocalendar()[2]
-    start_date=datetime.datetime.now() - datetime.timedelta(days=week_day+6)
+    start_date=datetime.datetime.now() - datetime.timedelta(days=week_day-1)
     date_match = (start_date + datetime.timedelta(days=0)).date().strftime("%a") + ', ' + str((start_date + datetime.timedelta(days=0)).date())
 
     try:
@@ -205,7 +208,7 @@ def update_timesheet(request, pk):
     week_timesheet = TimeSheetWeek.objects.get(id=pk)
     
     week_day=datetime.datetime.now().isocalendar()[2]
-    start_date=datetime.datetime.now() - datetime.timedelta(days=week_day)
+    start_date=datetime.datetime.now() - datetime.timedelta(days=week_day-1)
             
     try:
        weektime_instance = TimeSheetWeek.objects.get(user_id=request.user, weekdates = week_timesheet.weekdates)
@@ -285,7 +288,6 @@ def update_timesheet(request, pk):
         else:
             for i in range(7):
                 i +=  1
-                print('i:',  i)
                 dates=[(start_date + datetime.timedelta(days=i)).date().strftime("%a") + ', ' + 
                     str((start_date + datetime.timedelta(days=i)).date()) for i in range(7)]  
 
@@ -298,6 +300,68 @@ def update_timesheet(request, pk):
          
         return render(request, 'update_timesheet.html', {'formset': formset})
 
-#def search(request):
+@login_required
+def add_expenses(request):
 
-#    return render(request, 'index.html')
+    if request.method ==  'POST':
+        form = Expensesform(request.POST, request.FILES)
+        print(form)
+        if form.is_valid():
+            print('inside form valid')
+            gross = float(form.cleaned_data['expense_gross'])
+            print(gross)
+            vat_value = float(gross * 0.20)
+            print(vat_value)
+            net_value = float(gross - vat_value)
+            print(net_value)
+            expense_instance = form.save(commit=False)
+            expense_instance.expense_VAT = vat_value
+            expense_instance.expense_net = net_value
+            expense_instance.userid = request.user
+            expense_instance.save()
+            messages.success(request, f'Expense saved!!!.')
+        return redirect('Index')
+    form = Expensesform(instance=request.user)
+    return render(request, 'add_expenses.html', {'form': form})
+
+
+@login_required
+def expenses_list(request):
+
+    expenses_list = Expenses.objects.filter(userid=request.user)
+    #formset = ExpenseFormSet(instance=expenses_list) 
+         
+        #return render(request, 'update_timesheet.html', {'formset': formset})
+    #form = Expensesform(instance=ex)
+    return render(request, 'expenses_list.html', {'expenses_list': expenses_list})
+
+class ExpenseHomeView(TemplateView):
+    template_name   =   'expense_list.html'
+
+
+class ExpenseListView(ListView):
+    model           =   Expenses
+    template_name   =   "expense_list.html"
+    
+
+# class ExpenseAddView(TemplateView):
+class ExpenseAddView(CreateView):
+    template_name   =   "expense_add.html"
+    def get(self, *args, **kwargs):
+        formset = ExpenseFormSet(queryset=Expenses.objects.none())
+        return self.render_to_response({'expense_formset': formset})
+
+    def post(self, *args, **kwargs):
+
+        formset = ExpenseFormSet(data=self.request.POST)
+        print(formset)
+        # Check if submitted forms are valid
+        if formset.is_valid():
+            for form in formset:
+                current_instance =  form.save(commit=False)
+                current_instance.userid = 'sofiacse@gmail.com'
+                current_instance.save()
+            #formset.save()
+            return redirect(reverse_lazy("list_expense"))
+
+        return self.render_to_response({'expense_formset': formset})

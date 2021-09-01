@@ -7,12 +7,10 @@
     {% csrf_token %}
     <div class="container">
         <h4>Home Address:</h4>
-        {{ form.home_address.label }}
-        {{ form.home_address }}
+        {{ form.home_address|as_crispy_field }}
         <strong>{{ form.home_address.errors }}</strong>
         <br>
-        {{ form.home_address_move_date.label}}
-        {{ form.home_address_move_date}}
+        {{ form.home_address_move_date|as_crispy_field}}
         <br>
         <button> 
             <span class="glyphicon glyphicon-pencil"></span>
@@ -21,28 +19,26 @@
     </div>
     <div class="container">
         <h4>Bank & Emergency Contact details:</h4>
-        {{ form.bank_account_number.label }}
-        {{ form.bank_account_number }}
+        {{ form.bank_account_number|as_crispy_field }}
         <strong>{{ form.bank_account_number.errors }}</strong>
         <br>
-        {{ form.bank_sort_code.label }}
-        {{ form.bank_sort_code }}
+        {{ form.bank_sort_code|as_crispy_field }}
         <strong>{{ form.bank_sort_code.errors }}</strong>
         <br>        
-        {{ form.emergency_contact_name.label }}
-        {{ form.emergency_contact_name }}
+       
+        {{ form.emergency_contact_name|as_crispy_field }}
         <strong>{{ form.emergency_contact_name.errors }}</strong>
         <br>
-        {{ form.emergency_contact_number.label }}
-        {{ form.emergency_contact_number }}
+        
+        {{ form.emergency_contact_number|as_crispy_field }}
         <strong>{{ form.emergency_contact_number.errors }}</strong>
         <br>
-        {{ form.emergency_contact_relationship.label }}
-        {{ form.emergency_contact_relationship }}
+        
+        {{ form.emergency_contact_relationship|as_crispy_field }}
         <strong>{{ form.emergency_contact_relationship.errors }}</strong>
         <br>
-        {{ form.emergency_contact_address.label }}
-        {{ form.emergency_contact_address }}
+       
+        {{ form.emergency_contact_address|as_crispy_field }}
         <strong>{{ form.emergency_contact_address.errors }}</strong>
         <br>
         <button>
@@ -52,28 +48,28 @@
     </div>
     <div   class="container">
         <h4>Job Information:</h4>
-        {{ form.national_insurance_number.label }}
-        {{ form.national_insurance_number }}
+      
+        {{ form.national_insurance_number|as_crispy_field }}
         <strong>{{ form.national_insurance_number.errors }}</strong>
         <br>
-        {{ form.department_name.label }}
-        {{ form.department_name }}
+        
+        {{ form.department_name|as_crispy_field }}
         <strong>{{ form.department_name.errors }}</strong>
         <br>
-        {{ form.job_title.label }}
-        {{ form.job_title }}
+       
+        {{ form.job_title|as_crispy_field }}
         <strong>{{ form.job_title.erros }}</strong>
         <br>
-        {{ form.date_of_joining.label }}
-        {{ form.date_of_joining }}
+       
+        {{ form.date_of_joining|as_crispy_field }}
         <strong>{{ form.date_of_joining.errors }}</strong>
         <br>
-        {{ form.salary_initial.label }}
-        {{ form.salary_initial }}
+       
+        {{ form.salary_initial|as_crispy_field }}
         <strong>{{ form.salary_initial.errors }}</strong>
         <br>
-        {{ form.nationality.label }}
-        {{ form.nationality }}
+        
+        {{ form.nationality|as_crispy_field }}
         <br>
         <button>
             <span class="glyphicon glyphicon-pencil"></span>
@@ -82,26 +78,25 @@
     </div>
     <div   class="container">
         <h4>Nationality Information:</h4>
-        {{ form.residence_permit_number.label }}
-        {{ form.residence_permit_number }}
+      
+        {{ form.residence_permit_number|as_crispy_field }}
         <strong>{{ form.residence_permit_number.errors }}</strong>
         <br>
-        {{ form.visa_type.label }}
-        {{ form.visa_type }}
+        
+        {{ form.visa_type|as_crispy_field }}
         <strong>{{ form.visa_type.errors }}</strong>
         <br>
-        {{ form.valid_from_date.label }}
-        {{ form.valid_from_date }}
+        
+        {{ form.valid_from_date|as_crispy_field }}
         <strong>{{ form.valid_from_date.erros }}</strong>
         <br>
-        {{ form.valid_to_date.label }}
-        {{ form.valid_to_date }}
+        
+        {{ form.valid_to_date|as_crispy_field }}
         <strong>{{ form.valid_to_date.errors }}</strong>
-        <br>
         <br>
         <button>
             <span class="glyphicon glyphicon-pencil"></span>
-            <input type="submit" class="btn btn-link+" name="Edit Nationality" value="Edit" />
+            <input type="submit" class="btn btn-link" name="Edit Nationality" value="Edit" />
         </button>        
     </div>
 </form> 

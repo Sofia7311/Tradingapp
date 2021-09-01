@@ -1,6 +1,7 @@
 from django import forms    
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from mainapp.models import CustomUser, TimeSheet, CountryField, TimeSheetWeek
+from django.forms.models import modelformset_factory
+from mainapp.models import CustomUser, Expenses, TimeSheet, CountryField, TimeSheetWeek
 from loginpgm.models import AddressHistory
 from django.utils import timezone
 #from mainapp.countries import CountryField
@@ -282,23 +283,24 @@ class CustomUserChangeForm(forms.ModelForm):
 
 
 class ReadonlyChangeForm(forms.ModelForm):
-    home_address                    =   forms.CharField(disabled=True)
-    home_address_move_date          =   forms.CharField(disabled=True)
-    emergency_contact_name          =   forms.CharField(disabled=True)
-    emergency_contact_number        =   forms.CharField(disabled=True)
-    emergency_contact_address       =   forms.CharField(disabled=True)
-    emergency_contact_relationship  =   forms.CharField(disabled=True)
-    bank_account_number             =   forms.CharField(disabled=True)
-    bank_sort_code                  =   forms.CharField(disabled=True)
-    job_title                       =   forms.CharField(disabled=True)
-    department_name                 =   forms.CharField(disabled=True)
-    salary_initial                  =   forms.CharField(disabled=True)
-    date_of_joining                 =   forms.CharField(disabled=True)
-    national_insurance_number       =   forms.CharField(disabled=True)
-    residence_permit_number         =   forms.CharField(disabled=True)
-    visa_type                       =   forms.CharField(disabled=True)
-    valid_from_date                 =   forms.CharField(disabled=True)
-    valid_to_date                   =   forms.CharField(disabled=True)
+    home_address                    =   forms.CharField(disabled=True, required=False)
+    home_address_move_date          =   forms.CharField(disabled=True, required=False)
+    emergency_contact_name          =   forms.CharField(disabled=True, required=False)
+    emergency_contact_number        =   forms.CharField(disabled=True, required=False)
+    emergency_contact_address       =   forms.CharField(disabled=True, required=False)
+    emergency_contact_relationship  =   forms.CharField(disabled=True, required=False)
+    bank_account_number             =   forms.CharField(disabled=True, required=False)
+    bank_sort_code                  =   forms.CharField(disabled=True, required=False)
+    job_title                       =   forms.CharField(disabled=True, required=False)
+    department_name                 =   forms.CharField(disabled=True, required=False)
+    salary_initial                  =   forms.CharField(disabled=True, required=False)
+    date_of_joining                 =   forms.CharField(disabled=True, required=False)
+    national_insurance_number       =   forms.CharField(disabled=True, required=False)
+    nationality                     =   forms.CharField(disabled=True, required=False)
+    residence_permit_number         =   forms.CharField(disabled=True, required=False)
+    visa_type                       =   forms.CharField(disabled=True, required=False)
+    valid_from_date                 =   forms.CharField(disabled=True, required=False)
+    valid_to_date                   =   forms.CharField(disabled=True, required=False)
     
     class Meta:
         model = CustomUser
@@ -370,14 +372,34 @@ class VisaholderForm(forms.ModelForm):
     residence_permit_number =   forms.CharField(label = 'Biometric Residence Permit number')
     valid_from_date =   forms.DateField(widget=DateInput)
     valid_to_date   =   forms.DateField(widget=DateInput)
+    visa_attachment      =   forms.ImageField(label='Attach - Visa copy', required=True)
+
     class Meta:     
         model = CustomUser
-        fields = ('residence_permit_number', 'visa_type',  'valid_from_date', 'valid_to_date')
+        fields = ('residence_permit_number', 'visa_type',  'valid_from_date', 'valid_to_date', 'visa_attachment')
 
 class BritishPassportform(forms.ModelForm):
     residence_permit_number =   forms.CharField(label = 'British Passport number')
     valid_from_date =   forms.DateField(widget=DateInput)
     valid_to_date   =   forms.DateField(widget=DateInput)
+    passport_attachment      =   forms.ImageField(label='Attach - passport copy', required=True)
     class Meta:     
         model = CustomUser
-        fields = ('residence_permit_number', 'valid_from_date', 'valid_to_date')
+        fields = ('residence_permit_number', 'valid_from_date', 'valid_to_date', 'passport_attachment')
+
+class Expensesform(forms.ModelForm):
+    STANDARD_VAT_CHOICES    =   [('Yes', 'Yes'), ('No', 'No')]
+    expense_date            =   forms.DateField(label = 'Date of Expense', widget=DateInput)
+    expense_attachment      =   forms.ImageField(label='Attachment(if any)', required=False)
+    is_standard_VAT         =   forms.ChoiceField(widget = forms.RadioSelect, 
+                                                choices=STANDARD_VAT_CHOICES,
+                                                label='Does this Gross include standard 20% VAT')
+    expense_gross           =   forms.DecimalField(label = 'Gross Amount')
+    
+    class Meta:
+        model               =   Expenses
+        fields              =   ('expense_type', 'expense_gross', 'is_standard_VAT', 'comments', 'expense_date', 
+                                'expense_attachment')
+
+ExpenseFormSet  =   modelformset_factory(Expenses, fields=('expense_date', 'expense_type',  'expense_VAT',
+                                          'expense_net', 'expense_gross', 'expense_attachment'), form=Expensesform, extra=1, can_delete=True)

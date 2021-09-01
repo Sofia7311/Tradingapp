@@ -1,0 +1,37 @@
+{%extends "base.html"%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load crispy_forms_filters static %}
+{%block content%}
+
+<div>
+    <table class="table table-bordered">
+        <tr>
+            <th>Description</th>
+            <th>Gross</th>
+            <th>VAT</th>
+            <th>NET</th>
+            <th>Comments</th>
+            <th>Attachment</th>
+        </tr>
+        {% for expenses in expenses_list %}
+        <tr>
+            <td>{{ expenses.expense_type }}</td> 
+            <td>{{ expenses.expense_gross}}</td>
+            <td>{{ expenses.expense_net}}</td>
+            <td>{{ expenses.expense_VAT}}</td>
+            <td>{{ expenses.comments}}</td>
+            {% if expenses.expense_attachment %}
+                <td><a class="nav-item nav-link" href="{{ expenses.expense_attachment.url }}" target="_blank" role="button">{{ expenses.expense_attachment }}</a></td>
+            {% else %}
+                <td>-</td>
+            {% endif %}
+        </tr> 
+        {% endfor %} 
+        
+    </table>   
+    
+    <a class="nav-item nav-link" href="{% url 'add_expenses' %}" role="button">Add Expenses</a>
+    
+</div>
+{%endblock content%}

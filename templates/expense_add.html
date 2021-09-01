@@ -1,0 +1,65 @@
+{%extends "base.html"%}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load crispy_forms_filters static %}
+{%block content%}
+
+    <h1>Add a new Expense</h1>
+    <form id="form-container" method="POST">
+        {% csrf_token %}
+        {{expense_formset.management_form}}
+        <table class="table">
+            <tr>
+            <th>Date of Expense</th>
+            <th>Expense Type</th>
+            <th>Expense Unit</th>
+            <th>Item Rate</th>
+            <th>Total amount</th>
+            <th>Attachment</th>
+            </tr>
+        </table>
+        <table class="expense-form" >
+            {% for form in expense_formset %}
+                <tr >
+                    <td>{{form.expense_date}}</td>
+                    <td>{{form.expense_type}}</td>
+                    <td>{{form.expense_VAT}}</td>
+                    <td>{{form.expense_net}}</td>
+                    <td>{{form.expense_gross}}</td>
+                    <td>{{form.expense_attachment}}</td>
+                    
+                
+                </tr>
+                
+            {% endfor %}
+        </table>
+        
+        <button id="add-form" type="button">Add Another Expense</button>
+        <button type="submit">Create Expenses</button>
+    </form>
+
+    <script>
+        let expenseForm =   document.querySelectorAll(".expense-form")
+        let container   =   document.querySelector("#form-container")
+        let addButton   =   document.querySelector("#add-form")
+        let totalForms  =   document.querySelector("#id_form-TOTAL_FORMS")
+
+        let formNum = expenseForm.length-1
+        addButton.addEventListener('click', addForm)
+        
+        function addForm(e){
+            e.preventDefault()
+
+            let newForm = expenseForm[0].cloneNode(true)
+            let formRegex = RegExp(`form-(\\d){1}-`,'g')
+
+            formNum++
+            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+            container.insertBefore(newForm, addButton)
+            
+            totalForms.setAttribute('value', `${formNum+1}`)
+        }
+
+
+    </script>
+    {%endblock content%} 

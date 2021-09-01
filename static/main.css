@@ -96,3 +96,13 @@ body {
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
   }
+
+  table { width: 70%; }
+  
+  table, th, td { border: solid 1px #DDD;
+      border-collapse: collapse; padding: 2px 3px; text-align: center;
+  }
+
+  .borderless td, .borderless th {
+    border: none;
+}

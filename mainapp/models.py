@@ -319,7 +319,7 @@ class CustomUser(AbstractUser):
         ('T29', 'UK Spouse Visa'),
         ('T30', 'UK Parent Visa'),
         ('T31', 'UK Child Visa'),
-
+        ('Other', 'Other')
         ] 
 
     email                       =   models.EmailField(primary_key=True, verbose_name='Email address', max_length=255, unique=True, error_messages={'unique': 'Email address already exists.'})
@@ -348,6 +348,8 @@ class CustomUser(AbstractUser):
     valid_from_date                 =   models.DateField(verbose_name='Valid from date', null=True)
     valid_to_date                   =   models.DateField(verbose_name='Valid to date', null=True)
     visa_type                       =   models.CharField(max_length = 100, choices=UK_VISA_TYPES)
+    visa_attachment                 =   models.ImageField(upload_to = 'images/', null=True, blank=True)
+    passport_attachment             =   models.ImageField(upload_to = 'images/', null=True, blank=True)
 
 
     objects = MyUserManager()
@@ -369,7 +371,7 @@ class TimeSheetWeek(models.Model):
         ] 
     #id =   models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     weekdates   =   models.CharField(max_length = 40, verbose_name='Start Date')
-    week_date_format  =  models.DateField()
+    #week_date_format  =  models.DateField()
     #timesheetweek_id  =   models.CharField(max_length = 40)
     total_hours =   models.DecimalField(max_digits=5, decimal_places=2)
     status      =   models.CharField(max_length = 20, choices=STATUS_CHOICES)
@@ -393,4 +395,34 @@ class TimeSheet(models.Model):
     def __int__(self):
         return self.id
 
+class Expenses(models.Model):
+    EXPENSE_CHOICES  =   [
+        ('', 'Select Expense Type'),
+        ('Travel Expense', 'Travel Expense'),
+        ('Taxi', 'Taxi'),
+        ('Parking', 'Parking'),
+        ('Car Mileage', 'Car Mileage'),
+        ('Postage', 'Postage'),
+        ('Print and Stationery', 'Print and Stationery'),
+        ('Books', 'Books'),
+        ('News and Magazine', 'News and Magazine'),
+        ('Subsistence', 'Subsistence'),
+        ('Use of Home', 'Use of Home'),
+        ('Evening Meals', 'Evening Meals'),
+        ('Hotels', 'Hotels')
+
+        ] 
+    expense_type        =   models.CharField(max_length = 100,  choices=EXPENSE_CHOICES)
+    expense_net         =   models.DecimalField(max_digits=6, decimal_places=2, null=True)
+    is_standard_VAT     =   models.CharField(max_length=5)
+    expense_VAT         =   models.DecimalField(max_digits=6, decimal_places=2, null=True)
+    expense_gross       =   models.DecimalField(max_digits=6, decimal_places=2, null=True)
+    comments            =   models.TextField(max_length = 150, null=True)
+    expense_date        =   models.DateField()
+    expense_update_date =   models.DateTimeField(default=timezone.now, verbose_name='Logged in date')
+    expense_attachment  =   models.ImageField(upload_to = 'images/', null=True, blank=True)
+    userid              =   models.ForeignKey(CustomUser, on_delete = models.CASCADE, blank=True)
+
+    def __str__(self):
+        return self.expense_type
 

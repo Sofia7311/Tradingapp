@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from mainapp.models import CustomUser, TimeSheet, TimeSheetWeek
+from mainapp.models import CustomUser, Expenses, TimeSheet, TimeSheetWeek
 from loginpgm.models import AddressHistory
 from mainapp.forms import CustomUserCreationForm, CustomUserChangeForm, HomeAddressAdminChangeForm, TimeSheetForm, TimeSheetWeekForm
 from django.contrib.auth.admin import UserAdmin
@@ -27,6 +27,8 @@ class CustomUserAdmin(UserAdmin):
         ('Emergency contact details', {'fields': ('emergency_contact_name', 'emergency_contact_number', 
         'emergency_contact_address')}),
         ('Bank Details', {'fields': ('bank_account_number', 'bank_sort_code')}),
+        ('Nationality', {'fields':  ('nationality','visa_type', 'residence_permit_number', 'valid_from_date', 'valid_to_date',
+        'visa_attachment', 'passport_attachment')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')})
     )
     #readonly_fields = ()
@@ -77,12 +79,25 @@ class TimeSheetWeekAdmin(admin.ModelAdmin):
 
 
     #form = TimeSheetWeekForm()
-    list_display = ('user_id', 'weekdates', 'status', 'total_hours','week_date_format')
+    list_display = ('user_id', 'weekdates', 'status', 'total_hours')
     #list_select_related  =  ('addresshistory',)
     ordering = ('user_id',)
 
+
+class ExpensesAdmin(admin.ModelAdmin):
+
+    class Meta:
+        model = Expenses
+        verbose_name_plural = 'Expenses'
+
+
+    #form = TimeSheetWeekForm()
+    list_display = ('expense_type', 'expense_net',  'expense_VAT', 'expense_gross', 'comments', 'expense_date', 'expense_attachment')
+    #list_select_related  =  ('addresshistory',)
+    ordering = ('userid',)
 admin.site.register(CustomUser, CustomUserAdmin)
 
 admin.site.register(AddressHistory, AddressHistoryAdmin)
 admin.site.register(TimeSheet, TimeSheetAdmin)
 admin.site.register(TimeSheetWeek, TimeSheetWeekAdmin)
+admin.site.register(Expenses, ExpensesAdmin)
